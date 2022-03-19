@@ -8,7 +8,7 @@ const val MAX_TRANSFER_IN_MONTH = 600_000_00
 const val MAX_TRANSFER_IN_MONTH_VKPAY = 40_000_00
 
 enum class CardName {
-    Mastercard, Maestro, Visa, Mir, VKPay
+    Mastercard, Maestro, Visa, MIR, VKPay
 }
 
 fun main() {
@@ -18,14 +18,13 @@ fun main() {
 
     val line = readLine()?.toInt()
     val transfer = line!!.times(100)
-    val userCard = CardName.Mir
-    val maxTransfer = cardCheck(userCard)
-
+    val userCard = CardName.MIR
+    val maxTransfer = cardCheck(userCard = userCard)
     val coefficient = dialogueWithTheUser(transfer, maxTransfer)
     val amountIntermediate = transfer / 10000 * PERCENT_VISA_MIR
     val amountVisaMir = amountApprovedVisaMir(amountIntermediate)
     val amountMastercardMaestro = amountApproveMastercardMaestro(transfer)
-    val amount = amountChoice(userCard, amountMastercardMaestro, amountVisaMir)
+    val amount = amountChoice(amountMastercardMaestro, amountVisaMir,userCard)
     printResult(transfer, amount, coefficient)
 
 
@@ -38,22 +37,22 @@ fun amountApprovedVisaMir(amountIntermediate: Int) =
     if (amountIntermediate > MIN_COMMISSION) amountIntermediate else MIN_COMMISSION
 
 fun amountChoice(
-    userCard: CardName,
     amountMastercardMaestro: Int,
-    amountVisaMir: Int
+    amountVisaMir: Int,
+    userCard: CardName = CardName.VKPay
 ) = when (userCard) {
     CardName.Mastercard, CardName.Maestro -> amountMastercardMaestro
-    CardName.Mir, CardName.Visa -> amountVisaMir
+    CardName.MIR, CardName.Visa -> amountVisaMir
     CardName.VKPay -> 0
 }
 
 fun cardCheck(userCard: CardName = CardName.VKPay) = when (userCard) {
-    CardName.Mastercard, CardName.Maestro, CardName.Mir, CardName.Visa -> MAX_TRANSFER_IN_MONTH
+    CardName.Mastercard, CardName.Maestro, CardName.MIR, CardName.Visa -> MAX_TRANSFER_IN_MONTH
     CardName.VKPay -> MAX_TRANSFER_IN_MONTH_VKPAY
 }
 
 fun limitOfDay(userCard: CardName = CardName.VKPay) = when (userCard) {
-    CardName.Mastercard, CardName.Maestro, CardName.Mir, CardName.Visa -> MAX_TRANSFER_IN_DAY
+    CardName.Mastercard, CardName.Maestro, CardName.MIR, CardName.Visa -> MAX_TRANSFER_IN_DAY
     CardName.VKPay -> MAX_TRANSFER_IN_DAY_VKPAY
 }
 
