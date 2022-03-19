@@ -7,7 +7,7 @@ class MainKtTest {
     @Test
     fun approved_normal_sum_amount_Mastercard_and_Maestro_() {
         // arrange
-        val transfer = 585_000_00
+        val transfer = 85_000_00
 
         //akt
         val result = amountApproveMastercardMaestro(transfer = transfer)
